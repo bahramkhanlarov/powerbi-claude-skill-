@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Power BI Skill — Use Cases</title>
+  <style>
+    :root {
+      --yellow: #F2C811;
+      --dark:   #1a1a2e;
+      --card:   #16213e;
+      --accent: #0f3460;
+      --text:   #e0e0e0;
+      --muted:  #888;
+      --green:  #27ae60;
+      --red:    #e74c3c;
+      --blue:   #2980b9;
+      --orange: #e67e22;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--dark) 100%);
+      border-bottom: 3px solid var(--yellow);
+      padding: 60px 40px 50px;
+      text-align: center;
+    }
+    .hero h1 { font-size: 2.4rem; color: var(--yellow); margin-bottom: 12px; }
+    .hero p  { font-size: 1.1rem; color: var(--muted); max-width: 600px; margin: 0 auto; }
+
+    /* ── LAYOUT ── */
+    section { padding: 56px 40px; max-width: 1100px; margin: 0 auto; }
+    h2 {
+      font-size: 1.5rem;
+      color: var(--yellow);
+      margin-bottom: 28px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--accent);
+    }
+
+    /* ── FEATURE GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 24px 20px;
+      transition: border-color .2s, transform .2s;
+    }
+    .card:hover { border-color: var(--yellow); transform: translateY(-3px); }
+    .card .icon { font-size: 2rem; margin-bottom: 12px; }
+    .card h3    { font-size: 1rem; color: var(--yellow); margin-bottom: 8px; }
+    .card p     { font-size: .88rem; color: var(--muted); }
+
+    /* ── STAR SCHEMA ── */
+    .schema-wrap { overflow-x: auto; }
+    .schema {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr 1fr;
+      grid-template-rows: auto auto auto;
+      gap: 16px;
+      min-width: 700px;
+      align-items: center;
+      justify-items: center;
+    }
+    .table-box {
+      background: var(--card);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 18px;
+      width: 190px;
+      font-size: .84rem;
+    }
+    .table-box.fact   { border-color: var(--yellow); background: #1c1c10; }
+    .table-box.dim    { border-color: var(--blue); }
+    .table-box .tname {
+      font-weight: 700;
+      font-size: .95rem;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--accent);
+    }
+    .table-box.fact .tname { color: var(--yellow); }
+    .table-box.dim  .tname { color: #5dade2; }
+    .table-box .col { padding: 2px 0; color: var(--muted); }
+    .table-box .col.key { color: var(--orange); }
+    .table-box .col.measure { color: var(--green); }
+    .arrow {
+      color: var(--yellow);
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* positions */
+    .fact-cell   { grid-column: 2; grid-row: 2; }
+    .dim-top     { grid-column: 2; grid-row: 1; }
+    .dim-left    { grid-column: 1; grid-row: 2; }
+    .dim-right   { grid-column: 3; grid-row: 2; }
+    .dim-bottom  { grid-column: 2; grid-row: 3; }
+    .arr-top     { grid-column: 2; grid-row: 1; align-self: end; font-size:1.2rem; }
+    .arr-left    { grid-column: 1; grid-row: 2; align-self: center; justify-self: end; }
+    .arr-right   { grid-column: 3; grid-row: 2; align-self: center; justify-self: start; }
+    .arr-bottom  { grid-column: 2; grid-row: 3; align-self: start; }
+
+    /* ── WORKFLOW ── */
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .phase {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      padding: 24px 18px;
+      position: relative;
+    }
+    .phase:not(:last-child)::after {
+      content: '›';
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.8rem;
+      color: var(--yellow);
+      z-index: 1;
+    }
+    .phase:first-child { border-radius: 8px 0 0 8px; }
+    .phase:last-child  { border-radius: 0 8px 8px 0; }
+    .phase .num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--yellow);
+      opacity: .3;
+      margin-bottom: 6px;
+    }
+    .phase h3 { font-size: .95rem; color: var(--yellow); margin-bottom: 10px; }
+    .phase ul { padding-left: 16px; font-size: .82rem; color: var(--muted); }
+    .phase li { margin-bottom: 4px; }
+
+    /* ── TMDL RULES ── */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .rule {
+      background: var(--card);
+      border-left: 4px solid var(--yellow);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 18px;
+    }
+    .rule h4 { font-size: .9rem; color: var(--yellow); margin-bottom: 6px; }
+    .rule p  { font-size: .82rem; color: var(--muted); }
+    .rule code {
+      background: var(--accent);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: .8rem;
+      color: #a8d8a8;
+    }
+
+    /* ── SUMMARIZE TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    th {
+      background: var(--accent);
+      color: var(--yellow);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    td { padding: 9px 14px; border-bottom: 1px solid var(--accent); color: var(--muted); }
+    tr:hover td { background: var(--card); color: var(--text); }
+    .badge-none    { color: var(--red); font-weight: 600; }
+    .badge-sum     { color: var(--green); font-weight: 600; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--muted);
+      font-size: .82rem;
+      border-top: 1px solid var(--accent);
+    }
+    footer a { color: var(--yellow); text-decoration: none; }
+
+    @media (max-width: 700px) {
+      .phases { grid-template-columns: 1fr 1fr; }
+      .phase:nth-child(2)::after { display: none; }
+      section { padding: 36px 20px; }
+      .hero h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>⚡ Power BI Skill</h1>
+  <p>Agentic development for semantic models — TMDL authoring, PBIP projects, DAX quality, and structured workflows.</p>
+</div>
+
+<!-- FEATURES -->
+<section>
+  <h2>What This Skill Does</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">📐</div>
+      <h3>TMDL Authoring</h3>
+      <p>Tab-based indentation rules, <code>///</code> description annotations, name quoting, measures, columns, roles, and calculation groups.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📁</div>
+      <h3>PBIP Project Structure</h3>
+      <p>Full file layout for thick and thin reports, forking a project, and cascade rename verification across all files.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>Star Schema Design</h3>
+      <p>One fact table surrounded by dimension tables. Bridge tables for many-to-many. Integer surrogate keys on all relationships.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🧮</div>
+      <h3>DAX Quality Rules</h3>
+      <p><code>DIVIDE()</code> over <code>/</code>, <code>SELECTEDVALUE()</code>, explicit <code>ALL()</code>, time intelligence from the Date table, no hardcoded years.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>Agentic Workflows</h3>
+      <p>Structured 4-phase approach: Discovery → Plan → Execute → Verify. Never modifies files without an approved plan.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔁</div>
+      <h3>Bulk Operations</h3>
+      <p>Parallel file edits, rename cascade detection across TMDL + PBIR + culture + DAX files, post-rename grep verification.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STAR SCHEMA -->
+<section>
+  <h2>Use Case — Star Schema Design</h2>
+  <div class="schema-wrap">
+    <div class="schema">
+
+      <!-- Top dim -->
+      <div class="dim-top table-box dim" style="grid-column:2;grid-row:1">
+        <div class="tname">Date</div>
+        <div class="col key">🔑 DateKey</div>
+        <div class="col">Date</div>
+        <div class="col">Year</div>
+        <div class="col">Quarter</div>
+        <div class="col">MonthName</div>
+      </div>
+
+      <!-- Left dim -->
+      <div class="dim-left table-box dim" style="grid-column:1;grid-row:2">
+        <div class="tname">Customer</div>
+        <div class="col key">🔑 CustomerKey</div>
+        <div class="col">CustomerName</div>
+        <div class="col">Region</div>
+        <div class="col">Segment</div>
+      </div>
+
+      <!-- Fact -->
+      <div class="fact-cell table-box fact" style="grid-column:2;grid-row:2">
+        <div class="tname">Sales (Fact)</div>
+        <div class="col key">🔑 _DateKey</div>
+        <div class="col key">🔑 _CustomerKey</div>
+        <div class="col key">🔑 _ProductKey</div>
+        <div class="col measure">∑ Revenue</div>
+        <div class="col measure">∑ Quantity</div>
+        <div class="col measure">∑ Cost</div>
+      </div>
+
+      <!-- Right dim -->
+      <div class="dim-right table-box dim" style="grid-column:3;grid-row:2">
+        <div class="tname">Product</div>
+        <div class="col key">🔑 ProductKey</div>
+        <div class="col">ProductName</div>
+        <div class="col">Category</div>
+        <div class="col">SubCategory</div>
+      </div>
+
+      <!-- Bottom dim -->
+      <div class="dim-bottom table-box dim" style="grid-column:2;grid-row:3">
+        <div class="tname">_Measures</div>
+        <div class="col measure">[Total Revenue]</div>
+        <div class="col measure">[YTD Revenue]</div>
+        <div class="col measure">[Gross Margin %]</div>
+        <div class="col measure">[Customer Count]</div>
+      </div>
+
+    </div>
+  </div>
+  <p style="margin-top:18px; font-size:.84rem; color:var(--muted);">
+    🔑 = surrogate key (hidden, <code>summarizeBy: none</code>) &nbsp;|&nbsp; ∑ = additive measure (<code>summarizeBy: sum</code>) &nbsp;|&nbsp; All measures live in the <code>_Measures</code> table
+  </p>
+</section>
+
+<!-- WORKFLOW -->
+<section>
+  <h2>Use Case — Agentic Workflow</h2>
+  <div class="phases">
+    <div class="phase">
+      <div class="num">01</div>
+      <h3>Discovery</h3>
+      <ul>
+        <li>Glob all .tmdl files</li>
+        <li>Read in parallel</li>
+        <li>Map tables, columns, relationships</li>
+        <li>Report findings</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="num">02</div>
+      <h3>Plan</h3>
+      <ul>
+        <li>List every file to change</li>
+        <li>Flag design decisions</li>
+        <li>Show before/after</li>
+        <li>Wait for approval</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="num">03</div>
+      <h3>Execute</h3>
+      <ul>
+        <li>Write files in parallel</li>
+        <li>Tables before relationships</li>
+        <li>Relationships before cultures</li>
+        <li>Generate UUIDs for lineageTags</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="num">04</div>
+      <h3>Verify</h3>
+      <ul>
+        <li>Re-read modified files</li>
+        <li>Check broken references</li>
+        <li>Run DAX validation</li>
+        <li>Run pbip-validator agent</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TMDL RULES -->
+<section>
+  <h2>Use Case — TMDL Critical Rules</h2>
+  <div class="rules-grid">
+    <div class="rule">
+      <h4>Triple-slash = Description</h4>
+      <p><code>///</code> immediately before a declaration sets the <code>Description</code> property. A blank line between <code>///</code> and the declaration breaks the model. Use <code>//</code> for regular comments.</p>
+    </div>
+    <div class="rule">
+      <h4>Tabs, Not Spaces</h4>
+      <p>Indentation is semantic. Tab depth = nesting level. DAX expression bodies sit at depth 3 — one deeper than measure properties. Spaces will break the TMDL parser.</p>
+    </div>
+    <div class="rule">
+      <h4>Name Quoting</h4>
+      <p>Quote names with spaces, dots, or special characters: <code>'Total Revenue'</code>, <code>'1) Period'</code>. Never quote simple names: <code>Product</code>, <code>_Measures</code>.</p>
+    </div>
+    <div class="rule">
+      <h4>lineageTag</h4>
+      <p>Every object needs a unique <code>lineageTag</code>. Never invent one manually — generate as UUID. Never change existing lineageTags; Power BI uses them for identity tracking.</p>
+    </div>
+    <div class="rule">
+      <h4>PBI_FormatHint</h4>
+      <p>Don't remove <code>PBI_FormatHint</code> annotations — Power BI Desktop re-adds them automatically. Leave them alongside your <code>formatString</code>.</p>
+    </div>
+    <div class="rule">
+      <h4>Last Resort Principle</h4>
+      <p>Prefer Tabular Editor CLI, Power BI MCP server, or <code>connect-pbid</code> over direct TMDL editing. Direct editing has no DAX validation or referential integrity checks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARIZE TABLE -->
+<section>
+  <h2>Use Case — summarizeBy Rules</h2>
+  <table>
+    <thead>
+      <tr><th>Column Type</th><th>summarizeBy</th><th>Reason</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Surrogate / natural keys</td><td><span class="badge-none">none</span></td><td>Keys are never aggregated</td></tr>
+      <tr><td>Text attributes (names, codes)</td><td><span class="badge-none">none</span></td><td>Text cannot be summed</td></tr>
+      <tr><td>Date columns</td><td><span class="badge-none">none</span></td><td>Dates are never summed</td></tr>
+      <tr><td>Boolean flags</td><td><span class="badge-none">none</span></td><td>Flags are never summed</td></tr>
+      <tr><td>Additive numeric facts (amounts, qty)</td><td><span class="badge-sum">sum</span></td><td>Default aggregation is SUM</td></tr>
+      <tr><td>Non-additive numerics (rates, %)</td><td><span class="badge-none">none</span></td><td>Cannot be meaningfully summed</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <p>
+    Integrated with <a href="https://github.com/data-goblin/power-bi-agentic-development">data-goblin/power-bi-agentic-development</a> ·
+    <a href="https://learn.microsoft.com/en-us/analysis-services/tmdl/tmdl-overview">TMDL Docs</a> ·
+    <a href="https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-overview">PBIP Docs</a>
+  </p>
+</footer>
+
+</body>
+</html>
